@@ -1,8 +1,8 @@
 /*!
-	@file MAX7219_7SEG_RPI/examples/src/TESTS/main.cpp
+	@file MAX7219_7SEG_RPI/examples/src/TESTS_HWSPI/main.cpp
 	@author Gavin Lyons
 	@brief A demo file for Max7219 seven segment displays ,
-	Carries out series of tests to test the library. Software SPI
+	Carries out series of tests to test the library. Hardware SPI
 	Project Name: MAX7219_7SEG_RPI
 	
 	@test
@@ -23,18 +23,17 @@
 #include <stdio.h> // Used for printf
 #include <MAX7219_7SEG_RPI.hpp> 
 
-// GPIO I/O pins on the raspberry pi ,pick on any I/O you want.
-#define  CLK 25  // clock GPIO, connected to clock line of module
-#define   CS 24   // Chip Select GPIO, connected to CS line of module
-#define  DIN 23  // data in GPIO, connected to DIN line of module
-
 // Delays for testing
 #define TEST_DELAY5 5000
 #define TEST_DELAY2 2000
 #define TEST_DELAY1 1000
 
+// Hardware SPI setup
+uint32_t SPI_SCLK_FREQ =  5000; // HW Spi only , freq in kiloHertz , MAX 125 Mhz MIN 30Khz
+uint8_t SPI_CEX_GPIO   =  0;     // HW Spi only which HW SPI chip enable pin to use,  0 or 1
+
 // Constructor object 
-MAX7219_SS_RPI myMAX(CLK, CS ,DIN);
+MAX7219_SS_RPI myMAX(SPI_SCLK_FREQ, SPI_CEX_GPIO);
 
 void Test1(void);
 void Test2(void);
@@ -58,7 +57,6 @@ int main(int argc, char **argv)
 	if(!bcm2835_init()) {return -1;}
 
 	myMAX.InitDisplay(8, 0x00);
-	
 	Test1();
 	Test2();
 	Test3();
@@ -69,10 +67,7 @@ int main(int argc, char **argv)
 	Test8();
 	Test9();
 	Test10();
-	
-	myMAX.DisplayEndOperations();
-	
-	// Close the bcm2835  library
+	// Close the bcm2835  ibrary
 	bcm2835_close(); 
 	printf("Test End\r\n");
 	return 0;

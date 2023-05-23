@@ -8,7 +8,7 @@
 
 #include "MAX7219_7SEG_RPI_Font.hpp"
 
-/*! ASCII Font Data Table */
+/*! ASCII Font Data Table ASCII to Seven Segment dp-abcdefg */
 static const uint8_t SevenSegASCIIFont[91] = {
     0x00,    /*     */
     0x30,    /*  !  */

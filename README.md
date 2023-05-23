@@ -25,6 +25,7 @@ Overview
 
 A Raspberry pi library to display data on a 8-digit MAX7219 seven segment module.
 Dynamic install-able system level Raspberry Pi C++ library.
+Hardware or software SPI, Shutdown mode, test mode and Brightness control supported.
 
 * Developed on
 	1. Raspberry PI 3 model b,
@@ -45,14 +46,14 @@ Installation
 	* Run following command to download from github.
 
 ```sh
-curl -sL https://github.com/gavinlyonsrepo/MAX7219_7SEG_RPI/archive/1.0.tar.gz | tar xz
+curl -sL https://github.com/gavinlyonsrepo/MAX7219_7SEG_RPI/archive/1.1.tar.gz | tar xz
 ```
 
 4. Run "make" to run the makefile in base folder to make and install library, it will be
     installed to usr/lib and usr/include
 
 ```sh
-cd MAX7219_7SEG_RPI-1.0
+cd MAX7219_7SEG_RPI-1.1
 make
 sudo make install
 ```
@@ -63,15 +64,17 @@ Test
 Wire up your Display.
 Next step is to test LED display and the just installed library with an example file.
 
-There are 2 examples files. The default example file is  "hello world".
+There are 4 examples files. The default example file is  "hello world".
 To decide which one the makefile(In examples folder) builds simply edit "SRC" variable
 at top of the makefile(In examples folder). 
 in the "User SRC directory Option Section" at top of file.
 
-|  List No | example file name  |  Description |
-| ------ | ------ |   ------ |
-| 1 | src/HELLOWORLD/main.cpp | Hello world |
-| 2 | src/TESTS/main.cpp |  test sequence  |
+|  List No | example file name  |  Description | SPI? |
+| ------ | ------ |   ------ | ----- |
+| 1 | src/HELLOWORLD/main.cpp | Hello world | software |
+| 2 | src/TESTS/main.cpp |  test sequence  | software 
+| 1 | src/HELLOWORLD_HWSPI/main.cpp | Hello world | hardware |
+| 2 | src/TESTS_HWSPI/main.cpp |  test sequence  | hardware |
 
 
 Next enter the examples folder and run the makefile in THAT folder,
@@ -101,20 +104,24 @@ There are two makefiles:
 Hardware
 ----------------------
 
-Software SPI only at present. Pick any GPIO you want.
-User may need to increase or decrease _CommDelay  variable (uS Communication delay) depending on speed 
-of CPU on system. 
+For Software SPI Pick any GPIO you want.
+For Hardware SPI you must Suse SPI pins SPIMOSI and SPISCLK , user can choice between SPICE0 and SPICE1 
+for chip select. The Datasheet says it's a 10MHZ device, In hardware SPI user can pick SPI bus speed.
+In software SPI user may need to increase or decrease _CommDelay  variable (uS Communication delay) depending on speed 
+of CPU on system. User can adjust brightness from 0x00 to 0x0f by default it is 0x08. 0x0f being brightest
  
 Connections to RPI:
 
-1. GPIO output => CLK = Clock
-2. GPIO output => CS  = Chip select
-3. GPIO output => DIN = Data in
-4. GND
-5. VCC 5V in theory but works at 3.3V, albeit with a dimmer display.
+| Pin no  | RPI SW SPI | RPI HW SPI  | Pin function |
+| --- | --- | --- | --- |
+| 1 | any GPIO output | SPISCLK |  CLK = Clock |
+| 2 | any GPIO output | SPICE0 or SP1CE1 | CS = Chip select |
+| 3 | any GPIO output | SPIMOSI |  DIN = Data in |
 
-Logic seems to work fine at 3.3V , it safe as it is all one way communications
-From RPI to MAX. 
+
+VCC 5V in theory but works at 3.3V in testing, albeit with a dimmer display.
+Logic seems to work fine at 3.3V , It safe as it is all one way communications
+From RPI to MAX.
 
 
 Notes
@@ -122,5 +129,4 @@ Notes
 
 TODO
 
-1. Hardware SPI
-2. Support for Cascaded Displays.
+1. Support for Cascaded Displays.

@@ -16,6 +16,8 @@
 # Comment out the others. 
 SRC=src/HELLOWORLD
 #SRC=src/TESTS
+#SRC=src/HELLOWORLD_HWSPI
+#SRC=src/TESTS_HWSPI
 #************************************************
 
 CC=g++

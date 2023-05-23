@@ -21,7 +21,44 @@ MAX7219_SS_RPI::MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect , uint8_t data)
 	_MAX7219_CLK_IO = clock;
 	_MAX7219_CS_IO  = chipSelect;
 	_MAX7219_DIN_IO = data;
+	_HardwareSPI = false;
 }
+
+/*!
+	@brief Constructor for class MAX7219_SS_RPI hardware SPI
+	@param kiloHertz SPI bus speed in kilohetrz
+	@param SPICEX_PIN Which SPICX pin to use 1 or 0 
+	@note overloaded see MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect , uint8_t data)
+*/
+MAX7219_SS_RPI::MAX7219_SS_RPI(uint32_t kiloHertz, uint8_t SPICEX_PIN)
+{
+	_KiloHertz = kiloHertz;
+	_SPICEX_CS_IO = SPICEX_PIN;
+	_HardwareSPI = true;
+}
+
+/*!
+	@brief End display operations, called at end of program before closing bcm2835 library.
+*/
+void MAX7219_SS_RPI::DisplayEndOperations(void)
+{
+	if (_HardwareSPI == false)
+	{
+		MAX7219_CS_SetLow;
+		MAX7219_CLK_SetLow;
+		MAX7219_DIN_SetLow;
+	}else
+	{
+		bcm2835_spi_end();
+	}
+}
+
+/*!
+	@brief get value of _HardwareSPI , true hardware SPI on , false off.
+*/
+bool MAX7219_SS_RPI::GetHardwareSPI(void)
+{return _HardwareSPI;}
+
 
 /*!
 	@brief Init the display
@@ -31,11 +68,38 @@ MAX7219_SS_RPI::MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect , uint8_t data)
 void MAX7219_SS_RPI::InitDisplay(uint8_t numDigits, uint8_t decodeMode)
 {
 
-	MAX7219_CS_SetDigitalOutput;
-	MAX7219_CLK_SetDigitalOutput;
-	MAX7219_DIN_SetDigitalOutput;
-	MAX7219_CS_SetHigh;
-
+	if (_HardwareSPI == false )
+	{
+		MAX7219_CS_SetDigitalOutput;
+		MAX7219_CLK_SetDigitalOutput;
+		MAX7219_DIN_SetDigitalOutput;
+		MAX7219_CS_SetHigh;
+	}else
+	{
+		bcm2835_spi_begin();
+		bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);
+		bcm2835_spi_setDataMode(BCM2835_SPI_MODE0); 
+		
+		// SPI bus speed
+		if (_KiloHertz > 0)
+			bcm2835_spi_setClockDivider(bcm2835_aux_spi_CalcClockDivider(_KiloHertz));
+		else // default, BCM2835_SPI_CLOCK_DIVIDER_64 3.90MHz Rpi2, 6.250MHz RPI3
+			bcm2835_spi_setClockDivider(BCM2835_SPI_CLOCK_DIVIDER_64); 
+		
+		// Chip enable pin select
+		if (_SPICEX_CS_IO == 0)
+		{
+			bcm2835_spi_chipSelect(BCM2835_SPI_CS0);
+			bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS0, LOW);
+		}else if (_SPICEX_CS_IO == 1)
+		{
+			bcm2835_spi_chipSelect(BCM2835_SPI_CS1);
+			bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS1, LOW);
+		}
+	}
+	
+	MAX7219_MilliSecondDelay(50); // small init delay before commencing transmissions
+	
 	_NoDigits = numDigits;
 	SetScanLimit(numDigits-1);
 	SetDecodeMode(decodeMode);
@@ -320,13 +384,21 @@ uint8_t MAX7219_SS_RPI::ASCIIFetch(uint8_t character, DecimalPoint_e decimalPoin
 	@param RegisterCode the register to write to
 	@param data The data byte to send to register
 */
-void MAX7219_SS_RPI::WriteDisplay( uint8_t RegisterCode, uint8_t data) {
-	
-	MAX7219_CS_SetLow;
-	HighFreqshiftOut(RegisterCode);
-	HighFreqshiftOut(data);
-	MAX7219_CS_SetHigh;
-	
+void MAX7219_SS_RPI::WriteDisplay( uint8_t RegisterCode, uint8_t data) 
+{
+	if (_HardwareSPI == false)
+	{
+		MAX7219_CS_SetLow;
+		HighFreqshiftOut(RegisterCode);
+		HighFreqshiftOut(data);
+		MAX7219_CS_SetHigh;
+	}else
+	{
+		uint8_t TransmitBuffer[2];
+		TransmitBuffer[0] = RegisterCode;
+		TransmitBuffer[1] = data;
+		bcm2835_spi_writenb((char*)TransmitBuffer,sizeof(TransmitBuffer));
+	}
 }
 
 /*!

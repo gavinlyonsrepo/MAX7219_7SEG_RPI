@@ -1,9 +1,10 @@
 /*!
-	@file MAX7219_7SEG_RPI/examples/src/HELLOWORLD/main.cpp
+	@file MAX7219_7SEG_RPI/examples/src/HELLOWORLD_HWSPI/main.cpp
 	@author Gavin Lyons
 	@brief A demo file library for Max7219 seven segment displays
 	Carries out most basic use case/test , "hello world" ~ helowrld
-	Software SPI
+	Hardware SPI
+	
 	Project Name: MAX7219_7SEG_RPI
 	
 	@test
@@ -15,13 +16,12 @@
 #include <stdio.h>
 #include <MAX7219_7SEG_RPI.hpp> 
 
-// GPIO I/O pins on the raspberry pi ,pick on any I/O you want.
-#define  CLK 25  // clock GPIO, connected to clock line of module
-#define  CS 24   // Chip Select GPIO, connected to CS line of module
-#define  DIN 23  // data in GPIO, connected to DIN line of module
+// Hardware SPI setup
+uint32_t SPI_SCLK_FREQ =  5000; // HW Spi only , freq in kiloHertz , MAX 125 Mhz MIN 30Khz
+uint8_t SPI_CEX_GPIO   =  0;     // HW Spi only which HW SPI chip enable pin to use,  0 or 1
 
 // Constructor object 
-MAX7219_SS_RPI myMAX(CLK, CS ,DIN);
+MAX7219_SS_RPI myMAX(SPI_SCLK_FREQ, SPI_CEX_GPIO);
 
 // Main loop
 int main(int argc, char **argv) 

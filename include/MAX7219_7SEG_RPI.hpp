@@ -37,6 +37,7 @@ class MAX7219_SS_RPI
 {
 public:
 	MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect ,uint8_t data);
+	MAX7219_SS_RPI(uint32_t kiloHertz, uint8_t SPICEX_PIN);
 	
 	/*! Alignment of text on display */
 	enum TextAlignment_e : uint8_t
@@ -93,7 +94,10 @@ public:
 	void SetCommDelay(uint16_t commDelay);
 	uint16_t GetCommDelay(void);
 	
-
+	bool GetHardwareSPI(void);
+	
+	void DisplayEndOperations(void);
+	
 private:
 	uint8_t _MAX7219_CS_IO;   /**<  GPIO connected to  CS on MAX7219  SW SPI only */
 	uint8_t _MAX7219_DIN_IO;  /**<  GPIO connected to DIO on MAX7219  SW SPI only */
@@ -102,6 +106,10 @@ private:
 	uint16_t _CommDelay = 0; /**<  uS delay used in communications SW SPI, User adjust */
 	uint8_t _NoDigits   = 8; /**<  Number of digits in display */
 
+	uint32_t _KiloHertz = 5000;   /**< Spi freq in kiloHertz , MAX 125 Mhz MIN 30Khz */
+	uint8_t  _SPICEX_CS_IO = 0;  /**< value = X , which SPI_CE pin to use, X = 1 or 0 */
+	bool _HardwareSPI = false;  /**< Is the Hardware SPI on , true yes , false SW SPI*/
+	
 	void HighFreqshiftOut(uint8_t value);
 	void WriteDisplay(uint8_t RegisterCode, uint8_t data);
 	uint8_t ASCIIFetch(uint8_t character,DecimalPoint_e decimalPoint);
