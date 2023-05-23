@@ -105,9 +105,9 @@ Hardware
 ----------------------
 
 For Software SPI Pick any GPIO you want.
-For Hardware SPI you must Suse SPI pins SPIMOSI and SPISCLK , user can choice between SPICE0 and SPICE1 
+For Hardware SPI the User must use fixed SPI pins SPIMOSI and SPISCLK, user can choice between SPICE0 and SPICE1 
 for chip select. The Datasheet says it's a 10MHZ device, In hardware SPI user can pick SPI bus speed.
-In software SPI user may need to increase or decrease _CommDelay  variable (uS Communication delay) depending on speed 
+In software SPI user may need to increase or decrease CommDelay variable (uS Communication delay) depending on speed 
 of CPU on system. User can adjust brightness from 0x00 to 0x0f by default it is 0x08. 0x0f being brightest
  
 Connections to RPI:
