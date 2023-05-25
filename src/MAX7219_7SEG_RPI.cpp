@@ -488,21 +488,7 @@ uint8_t MAX7219_SS_RPI::ASCIIFetch(uint8_t character, DecimalPoint_e decimalPoin
 */
 void MAX7219_SS_RPI::WriteDisplay( uint8_t RegisterCode, uint8_t data) 
 {
-	/*
-	if (_HardwareSPI == false)
-	{
-		MAX7219_CS_SetLow;
-		HighFreqshiftOut(RegisterCode);
-		HighFreqshiftOut(data);
-		MAX7219_CS_SetHigh;
-	}else
-	{
-		uint8_t TransmitBuffer[2];
-		TransmitBuffer[0] = RegisterCode;
-		TransmitBuffer[1] = data;
-		bcm2835_spi_writenb((char*)TransmitBuffer,sizeof(TransmitBuffer));
-	}
-	*/
+
 	if (_HardwareSPI == false)
 	{
 		MAX7219_CS_SetLow;
