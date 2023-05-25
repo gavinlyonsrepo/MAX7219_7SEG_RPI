@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 	printf("Test Begin :: MAX7219_7SEG_RPI\r\n");
 	if(!bcm2835_init()) {return -1;}
 
-	myMAX.InitDisplay(8, 0x00);
+	myMAX.InitDisplay(myMAX.ScanEightDigit, myMAX.DecodeModeNone);
 	
 	Test1();
 	Test2();

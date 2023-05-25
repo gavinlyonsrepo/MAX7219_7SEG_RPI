@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 	
 	// Hello world test on MAX7219
 	char teststr1[] = "HElowrld";
-	myMAX.InitDisplay(8, 0x00);
+	myMAX.InitDisplay(myMAX.ScanEightDigit, myMAX.DecodeModeNone);
 	myMAX.ClearDisplay();
 	myMAX.DisplayText(teststr1, myMAX.AlignRight);
 	MAX7219_MilliSecondDelay(5000);

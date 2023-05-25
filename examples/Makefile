@@ -4,6 +4,8 @@
 
 # ************************************************
 
+#Note : CFLAGS : -std=c++2a needed by Clock Demo ONLY
+
 # **************************************
 # Options
 # 1. make (compile's example file)
@@ -12,17 +14,19 @@
 # **************************************
 
 # **** User SRC directory Option Section *********
-# pick on example "SRC" dir and ONE ONLY.
+# pick on example "#SRC" dir and ONE ONLY.
 # Comment out the others. 
-SRC=src/HELLOWORLD
+SRC=src/HELLOWORLD_HWSPI
 #SRC=src/TESTS
-#SRC=src/HELLOWORLD_HWSPI
 #SRC=src/TESTS_HWSPI
+#SRC=src/BCDMODE
+#SRC=src/CLOCK_DEMO
+#SRC=src/CASCADE_DEMO
 #************************************************
 
 CC=g++
-LDFLAGS= -lbcm2835 -lrt -lMAX7219_7SEG_RPI
-CFLAGS = -Iinclude/ -c -Wall 
+LDFLAGS= -lbcm2835 -lMAX7219_7SEG_RPI 
+CFLAGS= -std=c++2a  -Iinclude/ -c -Wall 
 MD=mkdir
 OBJ=obj
 SRCS = $(wildcard $(SRC)/*.cpp)

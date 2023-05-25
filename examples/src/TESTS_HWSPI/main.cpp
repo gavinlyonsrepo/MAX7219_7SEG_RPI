@@ -45,8 +45,6 @@ void Test7(void);
 void Test8(void);
 void Test9(void);
 void Test10(void);
-void Test11(void);
-
 
 // Main loop
 int main(int argc, char **argv) 
@@ -56,7 +54,8 @@ int main(int argc, char **argv)
 	printf("Test Begin :: MAX7219_7SEG_RPI\r\n");
 	if(!bcm2835_init()) {return -1;}
 
-	myMAX.InitDisplay(8, 0x00);
+	myMAX.InitDisplay(myMAX.ScanEightDigit, myMAX.DecodeModeNone);
+
 	Test1();
 	Test2();
 	Test3();
@@ -67,6 +66,7 @@ int main(int argc, char **argv)
 	Test8();
 	Test9();
 	Test10();
+
 	// Close the bcm2835  ibrary
 	bcm2835_close(); 
 	printf("Test End\r\n");

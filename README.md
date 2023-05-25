@@ -46,14 +46,14 @@ Installation
 	* Run following command to download from github.
 
 ```sh
-curl -sL https://github.com/gavinlyonsrepo/MAX7219_7SEG_RPI/archive/1.1.tar.gz | tar xz
+curl -sL https://github.com/gavinlyonsrepo/MAX7219_7SEG_RPI/archive/1.2.tar.gz | tar xz
 ```
 
 4. Run "make" to run the makefile in base folder to make and install library, it will be
     installed to usr/lib and usr/include
 
 ```sh
-cd MAX7219_7SEG_RPI-1.1
+cd MAX7219_7SEG_RPI-1.2
 make
 sudo make install
 ```
@@ -64,18 +64,19 @@ Test
 Wire up your Display.
 Next step is to test LED display and the just installed library with an example file.
 
-There are 4 examples files. The default example file is  "hello world".
+There are 6 examples files. The default example file is  "hello world".
 To decide which one the makefile(In examples folder) builds simply edit "SRC" variable
 at top of the makefile(In examples folder). 
 in the "User SRC directory Option Section" at top of file.
 
-|  List No | example file name  |  Description | SPI? |
+| List No | Example file name  | Description | SPI type |
 | ------ | ------ |   ------ | ----- |
-| 1 | src/HELLOWORLD/main.cpp | Hello world | software |
-| 2 | src/TESTS/main.cpp |  test sequence  | software 
-| 1 | src/HELLOWORLD_HWSPI/main.cpp | Hello world | hardware |
-| 2 | src/TESTS_HWSPI/main.cpp |  test sequence  | hardware |
-
+| 1 | src/TESTS/main.cpp |  test sequence  | software |
+| 2 | src/HELLOWORLD_HWSPI/main.cpp | Hello world | hardware |
+| 3 | src/TESTS_HWSPI/main.cpp |  test sequence  | hardware |
+| 4 | src/BCDMODE/main.cpp | Shows use of BCD built-in font  | hardware |
+| 5 | src/CLOCK_DEMO/main.cpp |  Clock demo , Shows use of cascaded displays | hardware |
+| 6 | src/CASCADE_DEMO/main.cpp | simple Demo showing use of cascaded displays | hardware |
 
 Next enter the examples folder and run the makefile in THAT folder,
 This makefile builds the examples file using the just installed library.
@@ -129,4 +130,6 @@ Notes
 
 TODO
 
-1. Support for Cascaded Displays.
+1. Support for Cascaded Displays added in Version 1.2 but untested as only one display available.
+	Casacded Displays are displays connected together. Din-> Dout and CS lines tied together.
+	
