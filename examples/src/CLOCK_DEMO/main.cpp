@@ -43,13 +43,19 @@ int main(int argc, char **argv)
 	// Init the bcm2835 library
 	printf("Test Begin :: MAX7219_7SEG_RPI\r\n");
 	printf("Press Ctrl+c to QUIT\r\n");
-	if(!bcm2835_init()) {return -1;}
-
-
+	if(!bcm2835_init())
+	{
+		printf("Error 1201 :: bcm2835_init failed. Are you running as root??\n");
+		return -1;
+	}
 	// Init the displays
 	// -Init Display one
 	myMAX.SetCurrentDisplayNumber(1);
-	myMAX.InitDisplay(myMAX.ScanEightDigit, myMAX.DecodeModeNone);
+	if(!myMAX.InitDisplay(myMAX.ScanEightDigit, myMAX.DecodeModeNone))
+	{
+		printf("Error 1202 : bcm2835_spi_begin failed. Are you running as root??\n");
+		return -1;
+	}
 	myMAX.ClearDisplay();
 	// -Init Display Two
 	myMAX.SetCurrentDisplayNumber(2);

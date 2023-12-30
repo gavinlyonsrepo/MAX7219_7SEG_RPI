@@ -120,7 +120,7 @@ public:
 												overriding, but not altering, all controls and digit registers */
 	};
 
-	void InitDisplay(ScanLimit_e numDigits, DecodeMode_e decodeMode);
+	bool InitDisplay(ScanLimit_e numDigits, DecodeMode_e decodeMode);
 	void ClearDisplay(void);
 	void DisplayEndOperations(void);
 
@@ -133,6 +133,8 @@ public:
 
 	bool GetHardwareSPI(void);
 
+	uint16_t GetLibVersionNum(void);
+	
 	uint8_t GetCurrentDisplayNumber(void);
 	void SetCurrentDisplayNumber(uint8_t);
 
@@ -147,6 +149,8 @@ public:
 
 
 private:
+	const uint16_t _LibVersionNum = 130;
+	
 	uint8_t _MAX7219_CS_IO;   /**<  GPIO connected to  CS on MAX7219,  SW SPI only */
 	uint8_t _MAX7219_DIN_IO;  /**<  GPIO connected to DIO on MAX7219,  SW SPI only */
 	uint8_t _MAX7219_CLK_IO;  /**<  GPIO connected to CLK on MAX7219,  SW SPI only */

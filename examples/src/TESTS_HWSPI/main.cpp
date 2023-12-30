@@ -35,6 +35,9 @@ uint8_t SPI_CEX_GPIO   =  0;     // HW Spi only which HW SPI chip enable pin to 
 // Constructor object 
 MAX7219_SS_RPI myMAX(SPI_SCLK_FREQ, SPI_CEX_GPIO);
 
+// Function Prototypes
+bool Setup(void);
+void EndTest(void);
 void Test1(void);
 void Test2(void);
 void Test3(void);
@@ -46,15 +49,11 @@ void Test8(void);
 void Test9(void);
 void Test10(void);
 
+
 // Main loop
 int main(int argc, char **argv) 
 {
-
-	// Init the bcm2835 library
-	printf("Test Begin :: MAX7219_7SEG_RPI\r\n");
-	if(!bcm2835_init()) {return -1;}
-
-	myMAX.InitDisplay(myMAX.ScanEightDigit, myMAX.DecodeModeNone);
+	if (!Setup()) return -1;
 
 	Test1();
 	Test2();
@@ -67,12 +66,42 @@ int main(int argc, char **argv)
 	Test9();
 	Test10();
 
-	// Close the bcm2835  ibrary
-	bcm2835_close(); 
-	printf("Test End\r\n");
+	EndTest();
 	return 0;
-} 
+}
 // End of main
+
+
+// Functions
+
+// Setup test
+bool Setup(void)
+{
+	printf("Test Begin :: MAX7219_7SEG_RPI\r\n");
+	if(!bcm2835_init())  // Init the bcm2835 library
+	{
+		printf("Error 1201 :: bcm2835_init failed. Are you running as root??\n");
+		return false;
+	}
+	printf("bcm2835 library Version Number :: %u\r\n",bcm2835_version());
+	printf("MAX7219_7SEG Library version number :: %u\r\n", myMAX.GetLibVersionNum()); 
+	if(!myMAX.InitDisplay(myMAX.ScanEightDigit, myMAX.DecodeModeNone))
+	{
+		printf("Error 1202 :: bcm2835_spi_begin failed. Are you running as root??\n");
+		return false;
+	}
+	myMAX.ClearDisplay();
+	return true;
+}
+
+// Clean up before exit
+void EndTest(void)
+{
+	myMAX.DisplayEndOperations();
+	bcm2835_close();  // Close the bcm2835 library
+	printf("Test End\r\n");
+}
+
 
 void Test1(void)
 {

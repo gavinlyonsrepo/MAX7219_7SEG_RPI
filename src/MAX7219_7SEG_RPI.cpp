@@ -39,6 +39,8 @@ MAX7219_SS_RPI::MAX7219_SS_RPI(uint32_t kiloHertz, uint8_t SPICEX_PIN)
 
 /*!
 	@brief End display operations, called at end of program before closing bcm2835 library.
+	@details End SPI operations. SPI0 pins P1-19 (MOSI), P1-21 (MISO), P1-23 (CLK), P1-24 (CE0) and P1-26 (CE1) 
+		are returned to their default INPUT behaviour.
 */
 void MAX7219_SS_RPI::DisplayEndOperations(void)
 {
@@ -55,18 +57,26 @@ void MAX7219_SS_RPI::DisplayEndOperations(void)
 
 /*!
 	@brief get value of _HardwareSPI , true hardware SPI on , false off.
+	@return _HardwareSPI , true hardware SPI on , false off.
 */
 bool MAX7219_SS_RPI::GetHardwareSPI(void)
 {return _HardwareSPI;}
 
+/*!
+	@brief get value of Library version number 
+	@return Library version number 130 = 1.3.0
+*/
+uint16_t MAX7219_SS_RPI::GetLibVersionNum(void)
+{return _LibVersionNum;}
 
 /*!
 	@brief Init the display
 	@param numDigits scan limit set to 8 normally , advanced use only 
 	@param decodeMode Must users will use 0x00 here
+	@return 1 if successful, 0 otherwise (perhaps because you are not running as root)
 	@note when cascading supplies init display one first always!
 */
-void MAX7219_SS_RPI::InitDisplay(ScanLimit_e numDigits, DecodeMode_e decodeMode)
+bool MAX7219_SS_RPI::InitDisplay(ScanLimit_e numDigits, DecodeMode_e decodeMode)
 {
 	if (_CurrentDisplayNumber == 1)
 	{
@@ -78,7 +88,10 @@ void MAX7219_SS_RPI::InitDisplay(ScanLimit_e numDigits, DecodeMode_e decodeMode)
 			MAX7219_CS_SetHigh;
 		}else
 		{
-			bcm2835_spi_begin();
+			if(!bcm2835_spi_begin())
+			{
+				return false;
+			}
 			bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);
 			bcm2835_spi_setDataMode(BCM2835_SPI_MODE0); 
 			
@@ -112,6 +125,7 @@ void MAX7219_SS_RPI::InitDisplay(ScanLimit_e numDigits, DecodeMode_e decodeMode)
 	DisplayTestMode(false);
 	ClearDisplay();
 	SetBrightness(IntensityDefault);
+	return true;
 }
 
 
