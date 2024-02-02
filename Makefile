@@ -75,7 +75,7 @@ uninstall:
 	@rm -vf ${LIBDIR}/${LIB}.*
 
 	@echo "[UNINSTALL HEADERS]"
-	@rm -rvf  $(PREFIX)/include/MAX7219_7SEG_RPI.hpp
+	@rm -rvf  $(PREFIX)/include/MAX7219_7SEG_RP*.hpp
 	@echo "[DONE!]"
 
 # clear build files

@@ -25,7 +25,7 @@ SRC=src/HELLOWORLD_HWSPI
 #************************************************
 
 CC=g++
-LDFLAGS= -lbcm2835 -lMAX7219_7SEG_RPI 
+LDFLAGS= -lbcm2835 -lMAX7219_7SEG_RPI
 CFLAGS= -std=c++2a  -Iinclude/ -c -Wall 
 MD=mkdir
 OBJ=obj
