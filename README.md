@@ -20,6 +20,7 @@
 
 * Name: MAX7219_7SEG_RPI
 * Author: Gavin Lyons.
+* See also : [Combined Display library 'Display_Lib_RPI'](https://github.com/gavinlyonsrepo/Display_Lib_RPI)
 
 * Description:
 
