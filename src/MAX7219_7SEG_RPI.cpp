@@ -92,27 +92,8 @@ bool MAX7219_SS_RPI::InitDisplay(ScanLimit_e numDigits, DecodeMode_e decodeMode)
 			{
 				return false;
 			}
-			bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);
-			bcm2835_spi_setDataMode(BCM2835_SPI_MODE0); 
-			
-			// SPI bus speed
-			if (_KiloHertz > 0)
-				bcm2835_spi_setClockDivider(bcm2835_aux_spi_CalcClockDivider(_KiloHertz));
-			else // default, BCM2835_SPI_CLOCK_DIVIDER_64 3.90MHz Rpi2, 6.250MHz RPI3
-				bcm2835_spi_setClockDivider(BCM2835_SPI_CLOCK_DIVIDER_64); 
-			
-			// Chip enable pin select
-			if (_SPICEX_CS_IO == 0)
-			{
-				bcm2835_spi_chipSelect(BCM2835_SPI_CS0);
-				bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS0, LOW);
-			}else if (_SPICEX_CS_IO == 1)
-			{
-				bcm2835_spi_chipSelect(BCM2835_SPI_CS1);
-				bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS1, LOW);
-			}
+			MAX7219SPIHWSettings();
 		}
-		
 		MAX7219_MilliSecondDelay(50); // small init delay before commencing transmissions
 	}
 	
@@ -553,5 +534,33 @@ void MAX7219_SS_RPI::SetScanLimit(ScanLimit_e numDigits)
 	WriteDisplay(MAX7219_REG_ScanLimit, numDigits);
 }
 
+/*!
+	@brief  Init Hardware SPI settings
+	@details MSBFIRST, mode 0 , SPI Speed , SPICEX pin
+	@note If multiple devices on SPI bus with different settings,
+	can be used to refresh MAX7219 settings
+*/
+void MAX7219_SS_RPI::MAX7219SPIHWSettings(void)
+{
+	bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);
+	bcm2835_spi_setDataMode(BCM2835_SPI_MODE0); 
+	
+	// SPI bus speed
+	if (_KiloHertz > 0)
+		bcm2835_spi_setClockDivider(bcm2835_aux_spi_CalcClockDivider(_KiloHertz));
+	else // default, BCM2835_SPI_CLOCK_DIVIDER_64 3.90MHz Rpi2, 6.250MHz RPI3
+		bcm2835_spi_setClockDivider(BCM2835_SPI_CLOCK_DIVIDER_64); 
+	
+	// Chip enable pin select
+	if (_SPICEX_CS_IO == 0)
+	{
+		bcm2835_spi_chipSelect(BCM2835_SPI_CS0);
+		bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS0, LOW);
+	}else if (_SPICEX_CS_IO == 1)
+	{
+		bcm2835_spi_chipSelect(BCM2835_SPI_CS1);
+		bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS1, LOW);
+	}
+}
 
 // == EOF ==

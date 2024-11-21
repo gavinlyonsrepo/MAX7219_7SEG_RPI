@@ -14,6 +14,7 @@
   * [Hardware](#hardware)
   * [Notes and Issues](#notes-and-issues)
 	* [Cascaded Displays](#cascaded-displays)
+	* [Multiple devices on SPI bus](#multiple-devices-on-spi-bus)
 
 
 ## Overview
@@ -46,14 +47,14 @@ Hardware or software SPI, Shutdown mode, test mode and Brightness control suppor
 	* Run following command to download from github.
 
 ```sh
-curl -sL https://github.com/gavinlyonsrepo/MAX7219_7SEG_RPI/archive/1.3.tar.gz | tar xz
+curl -sL https://github.com/gavinlyonsrepo/MAX7219_7SEG_RPI/archive/1.4.tar.gz | tar xz
 ```
 
 3. Run "make" to run the makefile in base folder and then  "make install" to install library, it will be
     installed to usr/lib and usr/include by default.
 
 ```sh
-cd MAX7219_7SEG_RPI-1.3
+cd MAX7219_7SEG_RPI-1.4
 make
 sudo make install
 ```
@@ -123,3 +124,9 @@ From RPI to MAX.
 Support for Cascaded Displays added in Version 1.2 but untested as only one display available.
 Casacded Displays are displays connected together. Din-> Dout and CS lines tied together.
 
+### Multiple devices on SPI bus
+
+When using hardware SPI for multiple other devices on the bus i.e. sensors etc( not cascaded displays)
+If the devices require different SPI settings (speed of bus, bit order , chip enable pins , SPI data mode).
+The user must call function **MAX7219SPIHWSettings()** before each block of 
+SPI transactions for display in order to refresh the SPI hardware settings for that device.

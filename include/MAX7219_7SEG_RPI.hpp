@@ -123,6 +123,7 @@ public:
 	bool InitDisplay(ScanLimit_e numDigits, DecodeMode_e decodeMode);
 	void ClearDisplay(void);
 	void DisplayEndOperations(void);
+	void MAX7219SPIHWSettings(void);
 
 	void SetBrightness(uint8_t brightness);
 	void DisplayTestMode(bool OnOff);
@@ -134,7 +135,7 @@ public:
 	bool GetHardwareSPI(void);
 
 	uint16_t GetLibVersionNum(void);
-	
+
 	uint8_t GetCurrentDisplayNumber(void);
 	void SetCurrentDisplayNumber(uint8_t);
 
@@ -149,7 +150,7 @@ public:
 
 
 private:
-	const uint16_t _LibVersionNum = 130;
+	const uint16_t _LibVersionNum = 140;
 	
 	uint8_t _MAX7219_CS_IO;   /**<  GPIO connected to  CS on MAX7219,  SW SPI only */
 	uint8_t _MAX7219_DIN_IO;  /**<  GPIO connected to DIO on MAX7219,  SW SPI only */
