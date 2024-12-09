@@ -8,6 +8,7 @@
 ## Table of contents
 
   * [Overview](#overview)
+  * [See Also](#see-also)
   * [Installation](#installation)
   * [Test](#test)
   * [Software](#software)
@@ -21,7 +22,6 @@
 
 * Name: MAX7219_7SEG_RPI
 * Author: Gavin Lyons.
-* See also : [Combined Display library 'Display_Lib_RPI'](https://github.com/gavinlyonsrepo/Display_Lib_RPI)
 
 * Description:
 
@@ -35,6 +35,11 @@ Hardware or software SPI, Shutdown mode, test mode and Brightness control suppor
 	3. Raspbian , Debian 12 bookworm OS, , 64 bit.
 	4. kernel : aarch64 Linux 6.1.0-rpi7-rpi-v8
 	5. bcm2835 Library 1.73 (Dependency: used for SPI, GPIO control and delays)
+
+## See Also
+
+The MAX7219_7SEG_RPI library has been amalgamated into my combined display library ['Display_Lib_RPI.'](https://github.com/gavinlyonsrepo/Display_Lib_RPI)
+This new library is under active development and should work on any Linux based single board computer.
 
 ## Installation
 
