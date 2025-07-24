@@ -8,3 +8,5 @@
 * version 1.4.0 Nov 2024 
 	* Minor update,  added function MAX7219SPIHWSettings() to allow multiple devices on hardware SPI bus, see readme for
 	details
+* version 1.5.0 July 2025
+	* Support for cascaded displays
