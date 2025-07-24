@@ -26,7 +26,9 @@
 // GPIO I/O pins on the raspberry pi ,pick on any I/O you want.
 #define  CLK 25  // clock GPIO, connected to clock line of module
 #define   CS 24   // Chip Select GPIO, connected to CS line of module
-#define  DIN 23  // data in GPIO, connected to DIN line of module
+#define  DIN 23  // data in GPIO, connected to DIN line of module 
+
+uint8_t NumberOfDisplays = 1; 
 
 // Delays for testing
 #define TEST_DELAY5 5000
@@ -34,7 +36,7 @@
 #define TEST_DELAY1 1000
 
 // Constructor object 
-MAX7219_SS_RPI myMAX(CLK, CS ,DIN);
+MAX7219_SS_RPI myMAX(CLK, CS ,DIN, NumberOfDisplays);
 
 // Function Prototypes
 bool Setup(void);

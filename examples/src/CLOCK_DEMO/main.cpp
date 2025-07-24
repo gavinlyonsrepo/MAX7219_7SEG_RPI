@@ -6,8 +6,6 @@
 			-# Display one shows time 
 			-# Display two shows Date
 			-# Hardware SPI Project Name: MAX7219_7SEG_RPI
-	
-	@note not fully tested as only one display available
 */
 
 // Libraries
@@ -25,9 +23,10 @@
 // Hardware SPI setup
 uint32_t SPI_SCLK_FREQ =  5000; // HW Spi only , freq in kiloHertz , MAX 125 Mhz MIN 30Khz
 uint8_t SPI_CEX_GPIO   =  0;     // HW Spi only which HW SPI chip enable pin to use,  0 or 1
+uint8_t NumberOfDisplays = 2; 
 
 // Constructor object
-MAX7219_SS_RPI myMAX(SPI_SCLK_FREQ, SPI_CEX_GPIO);
+MAX7219_SS_RPI myMAX(SPI_SCLK_FREQ, SPI_CEX_GPIO, NumberOfDisplays);
 
 // Function Prototypes
 std::string UTC_string(void);

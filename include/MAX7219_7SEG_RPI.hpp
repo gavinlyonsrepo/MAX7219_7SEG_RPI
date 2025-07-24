@@ -36,8 +36,8 @@
 class MAX7219_SS_RPI
 {
 public:
-	MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect ,uint8_t data);
-	MAX7219_SS_RPI(uint32_t kiloHertz, uint8_t SPICEX_PIN);
+	MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect ,uint8_t data, uint8_t totalDisplays);
+	MAX7219_SS_RPI(uint32_t kiloHertz, uint8_t SPICEX_PIN, uint8_t totalDisplays);
 
 	/*! The decode-mode register sets BCD code B or no-decode operation for each digit */
 	enum DecodeMode_e : uint8_t
@@ -166,7 +166,7 @@ private:
 	DecodeMode_e CurrentDecodeMode; /**< Enum to store current decode mode  */
 
 	uint8_t _CurrentDisplayNumber = 1; /**< Which display the user wishes to write to in a cascade of connected displays*/
-
+	uint8_t _NoDisplays = 1; /**< Number of displays in cascade, default is 1 */
 	void HighFreqshiftOut(uint8_t value);
 	void WriteDisplay(uint8_t RegisterCode, uint8_t data);
 	uint8_t ASCIIFetch(uint8_t character,DecimalPoint_e decimalPoint);

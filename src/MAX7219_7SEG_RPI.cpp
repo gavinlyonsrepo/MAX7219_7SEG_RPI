@@ -14,13 +14,15 @@
 	@param clock CLk pin
 	@param chipSelect CS pin
 	@param data DIO pin 
+	@param totalDisplays Total number of displays in cascade
 	@note overloaded see MAX7219_SS_RPI(uint32_t KiloHertz, uint8_t SPICE_Pin)
 */
-MAX7219_SS_RPI::MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect , uint8_t data)
+MAX7219_SS_RPI::MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect , uint8_t data, uint8_t totalDisplays)
 {
 	_MAX7219_CLK_IO = clock;
 	_MAX7219_CS_IO  = chipSelect;
 	_MAX7219_DIN_IO = data;
+	_NoDisplays = totalDisplays;
 	_HardwareSPI = false;
 }
 
@@ -28,12 +30,14 @@ MAX7219_SS_RPI::MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect , uint8_t data)
 	@brief Constructor for class MAX7219_SS_RPI hardware SPI
 	@param kiloHertz SPI bus speed in kilohetrz
 	@param SPICEX_PIN Which SPICX pin to use 1 or 0 
+	@param totalDisplays Total number of displays in cascade
 	@note overloaded see MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect , uint8_t data)
 */
-MAX7219_SS_RPI::MAX7219_SS_RPI(uint32_t kiloHertz, uint8_t SPICEX_PIN)
+MAX7219_SS_RPI::MAX7219_SS_RPI(uint32_t kiloHertz, uint8_t SPICEX_PIN, uint8_t totalDisplays)
 {
 	_KiloHertz = kiloHertz;
 	_SPICEX_CS_IO = SPICEX_PIN;
+	_NoDisplays = totalDisplays;
 	_HardwareSPI = true;
 }
 
@@ -487,12 +491,14 @@ void MAX7219_SS_RPI::WriteDisplay( uint8_t RegisterCode, uint8_t data)
 	if (_HardwareSPI == false)
 	{
 		MAX7219_CS_SetLow;
-		HighFreqshiftOut(RegisterCode);
-		HighFreqshiftOut(data);
-		if (_CurrentDisplayNumber  > 1)
+		// Loop over all displays, from last to first in chain
+		for (int8_t i = _NoDisplays; i >= 1; i--)
 		{
-			for (uint8_t i= 1 ; i <_CurrentDisplayNumber; i++)
+			if (i == _CurrentDisplayNumber)
 			{
+				HighFreqshiftOut(RegisterCode);
+				HighFreqshiftOut(data);
+			}else{
 				HighFreqshiftOut(MAX7219_REG_NOP);
 				HighFreqshiftOut(0x00);
 			}
@@ -500,16 +506,17 @@ void MAX7219_SS_RPI::WriteDisplay( uint8_t RegisterCode, uint8_t data)
 		MAX7219_CS_SetHigh;
 	}else
 	{
-		uint8_t TransmitBuffer[_CurrentDisplayNumber*2];
-		TransmitBuffer[0] = RegisterCode;
-		TransmitBuffer[1] = data;
-		if (_CurrentDisplayNumber  > 1)
-		{
-			for (uint8_t i= 2 ; i < (_CurrentDisplayNumber*2) ; i++)
-			{
-				TransmitBuffer[i] = 0x00;
-			}
+		uint8_t TransmitBuffer[_NoDisplays * 2];
+		// Fill all with NOPs
+		for (uint8_t i = 0; i < _NoDisplays; i++) {
+			TransmitBuffer[i * 2]     = MAX7219_REG_NOP;
+			TransmitBuffer[i * 2 + 1] = 0x00;
 		}
+		// Place real command for the target display
+		uint8_t displayIndex = _NoDisplays - _CurrentDisplayNumber;
+		TransmitBuffer[displayIndex * 2]     = RegisterCode;
+		TransmitBuffer[displayIndex * 2 + 1] = data;
+
 		bcm2835_spi_writenb((char*)TransmitBuffer,sizeof(TransmitBuffer));
 	}
 }

@@ -52,14 +52,14 @@ This new library is under active development and should work on any Linux based 
 	* Run following command to download from github.
 
 ```sh
-curl -sL https://github.com/gavinlyonsrepo/MAX7219_7SEG_RPI/archive/1.4.tar.gz | tar xz
+curl -sL https://github.com/gavinlyonsrepo/MAX7219_7SEG_RPI/archive/1.5.tar.gz | tar xz
 ```
 
 3. Run "make" to run the makefile in base folder and then  "make install" to install library, it will be
     installed to usr/lib and usr/include by default.
 
 ```sh
-cd MAX7219_7SEG_RPI-1.4
+cd MAX7219_7SEG_RPI-1.5
 make
 sudo make install
 ```
@@ -126,8 +126,10 @@ From RPI to MAX.
 
 ### Cascaded Displays
 
-Support for Cascaded Displays added in Version 1.2 but untested as only one display available.
-Casacded Displays are displays connected together. Din-> Dout and CS lines tied together.
+Support for Cascaded Displays is shown in one of examples files. Multiple displays can be connected together. Cascaded Displays are displays connected together.  CS and CLK lines are tied together.
+The DIN line is connected to the first display only. The DOUT line of the first display is then connected to the DIN line of the next display and so on. Diagram below shows how to connect two displays together. Specify number of displays in constructor parameter.
+
+![img Cascade](https://github.com/gavinlyonsrepo/displaylib_LED_PICO/blob/main/extra/image/max7219cascade.png)
 
 ### Multiple devices on SPI bus
 
